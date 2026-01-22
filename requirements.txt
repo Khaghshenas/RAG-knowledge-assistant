@@ -1,0 +1,6 @@
+datasets 
+tqdm
+transformers
+sentence-transformers
+torch
+faiss-cpu

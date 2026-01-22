@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.venv
+venv/
+env/
+.venv-reg/
+.venv-rag/
+.venv/
+
+# Jupyter
+notebooks/
+.ipynb_checkpoints/
+
+# Data
+data/raw/
+data/processed/
+
+# Embeddings / indexes
+*.faiss
+*.index
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
