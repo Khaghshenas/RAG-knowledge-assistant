@@ -15,8 +15,9 @@ def load_embeddings():
     data = np.load(EMBEDDINGS_PATH, allow_pickle=True)
     embeddings = data["embeddings"].astype("float32")
     chunk_ids = data["chunk_ids"]
+    texts = data["texts"]
     metadata = data["metadata"]
-    return embeddings, chunk_ids, metadata
+    return embeddings, chunk_ids, texts, metadata
 
 
 def build_faiss_index(embeddings):
@@ -32,13 +33,14 @@ def build_faiss_index(embeddings):
     return index
 
 
-def save_index(index, chunk_ids, metadata):
+def save_index(index, chunk_ids, texts, metadata):
     faiss.write_index(index, str(INDEX_PATH))
 
     with open(METADATA_PATH, "wb") as f:
         pickle.dump(
             {
                 "chunk_ids": chunk_ids,
+                "texts": texts,
                 "metadata": metadata,
             },
             f,
@@ -54,15 +56,20 @@ def load_index():
     with open(METADATA_PATH, "rb") as f:
         data = pickle.load(f)
 
-    return index, data["chunk_ids"], data["metadata"]
+    return (
+        index,
+        data["chunk_ids"],
+        data["texts"],
+        data["metadata"],
+    )
 
 
 if __name__ == "__main__":
     
     print("Building FAISS index...")
 
-    embeddings, chunk_ids, metadata = load_embeddings()
+    embeddings, chunk_ids, texts, metadata = load_embeddings()
     index = build_faiss_index(embeddings)
-    save_index(index, chunk_ids, metadata)
+    save_index(index, chunk_ids, texts, metadata)
 
     print(f"Index built with {index.ntotal} vectors")

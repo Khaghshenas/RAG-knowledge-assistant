@@ -17,7 +17,7 @@ class FaissRetriever:
         self.top_k = top_k
         self.model = SentenceTransformer(MODEL_NAME)
 
-        self.index, self.chunk_ids, self.metadata = load_index()
+        self.index, self.chunk_ids, self.texts, self.metadata = load_index()
 
     def encode_query(self, query: str):
         embedding = self.model.encode([query]).astype("float32")
@@ -33,8 +33,9 @@ class FaissRetriever:
         for score, idx in zip(scores[0], indices[0]):
             results.append({
                 "chunk_id": self.chunk_ids[idx],
+                "text": self.texts[idx],
                 "score": float(score),
-                "metadata": self.metadata[idx]
+                "metadata": self.metadata[idx],
             })
 
         return results

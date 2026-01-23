@@ -40,6 +40,11 @@ for i in tqdm(range(0, len(chunks), BATCH_SIZE)):
 embeddings = np.vstack(embeddings)
 print(f"Embeddings shape: {embeddings.shape}")
 
-
-np.savez_compressed(EMBEDDINGS_FILE, embeddings=embeddings, chunk_ids=np.array(chunk_ids), metadata=np.array(metadata))
+np.savez_compressed(
+    EMBEDDINGS_FILE,
+    embeddings=embeddings,
+    chunk_ids=np.array(chunk_ids),
+    texts=np.array(chunks),
+    metadata=np.array(metadata),
+)
 print(f"Saved embeddings to {EMBEDDINGS_FILE}")
