@@ -9,16 +9,26 @@ from rag_pipeline import RAGPipeline
 
 rag = RAGPipeline(top_k=5)
 
-question = "What is the name of Beyonce's younger sister?"
+sample_questions = [
+    "What is the official language of Brazil?",
+    "What is the capital of France?",
+    "Who is the author of the Harry Potter series?",
+    "What is the name of Beyonce's younger sister?"
+]
 
-result = rag.answer(question)
+predictions = []
 
-print("\nQUESTION:")
-print(result["question"])
+for q in sample_questions:
+    result = rag.answer(q)
+    predictions.append({
+        "question": q,
+        "answer": result["answer"],
+        "sources": [c["metadata"] for c in result["contexts"]]
+    })
 
-print("\nANSWER:")
-print(result["answer"])
-
-print("\nSOURCES:")
-for ctx in result["contexts"]:
-    print("-", ctx["metadata"])
+# Display predictions
+for p in predictions:
+    print("Q:", p["question"])
+    print("A:", p["answer"])
+    #print("Sources:", p["sources"])
+    print("-" * 50)
