@@ -13,7 +13,8 @@ sample_questions = [
     "What is the official language of Brazil?",
     "What is the capital of France?",
     "Who is the author of the Harry Potter series?",
-    "What is the name of Beyonce's younger sister?"
+    "What is the name of Beyonce's younger sister?",
+    "What is the capital of Japan?"
 ]
 
 predictions = []

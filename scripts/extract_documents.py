@@ -3,6 +3,7 @@ from pathlib import Path
 from tqdm import tqdm
 
 def extract_contexts(input_file: Path, output_file: Path):
+    seen_contexts = set()
     docs = []
 
     if not input_file.exists():
@@ -16,11 +17,15 @@ def extract_contexts(input_file: Path, output_file: Path):
 
     # Extract contexts
     for item in tqdm(data, desc="Processing examples"):
-        docs.append({
-            "text": item["context"],
-            "source": "squad_v2",
-            "title": item["title"]
-        })
+        context = item["context"].strip()
+
+        if context not in seen_contexts:
+            seen_contexts.add(context)
+            docs.append({
+                "text": context,
+                "source": "squad_v2",
+                "title": item["title"]
+            })
 
     # Ensure output directory exists
     output_file.parent.mkdir(parents=True, exist_ok=True)

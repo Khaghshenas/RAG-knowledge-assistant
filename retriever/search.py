@@ -24,10 +24,10 @@ class FaissRetriever:
         faiss.normalize_L2(embedding)
         return embedding
 
-    def search(self, query: str):
+    def search(self, query: str, topk):
         query_embedding = self.encode_query(query)
 
-        scores, indices = self.index.search(query_embedding, self.top_k)
+        scores, indices = self.index.search(query_embedding, topk)
 
         results = []
         for score, idx in zip(scores[0], indices[0]):

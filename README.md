@@ -11,6 +11,14 @@ The **Project Goal** is to:
 - Leverage embeddings + FAISS for fast document retrieval.
 - Employ an instruction-tuned LLM (flan-t5-large) to generate precise, context-aware answers.
 
+---
+## Key Features
+
+- **End-to-End RAG Pipeline**: From document ingestion and chunking to FAISS retrieval and LLM generation.
+- **Cross-Encoder Re-Ranking**: Improves retrieval accuracy by rescoring the top-k chunks from FAISS before passing them to the generator.
+- **Unique Document Filtering**: Ensures duplicate documents are removed during preprocessing, reducing redundancy and improving retrieval diversity.
+- **Explainable Answers**: Retrieved chunks and metadata are returned alongside answers for grounding.
+- **Lightweight and Modular**: Can run on CPU or small-to-medium GPUs, and allows easy swapping of embeddings, LLMs, or indexing backends.
 
 ---
 ## Model Predictions
@@ -79,13 +87,13 @@ cd rag-qa-squad_v2
 
 Create the virtual environment (only needed once):
 ```bash
-python -m venv .venv   # Windows
-python3 -m venv .venv # Linux / macOS
+python -m venv .venv-rag   # Windows
+python3 -m venv .venv-rag # Linux / macOS
 ```
 After the environment has been created, activate it:
 ```bash
-venv\Scripts\Activate.ps1   # Windows (PowerShell)
-source .venv/bin/activate # Linux / macOS
+.venv-rag\Scripts\Activate.ps1   # Windows (PowerShell)
+source .venv-rag/bin/activate # Linux / macOS
 ```
 Once the environment is activated, install the dependencies:
 ```bash
