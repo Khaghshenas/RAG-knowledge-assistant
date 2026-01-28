@@ -28,7 +28,7 @@ class RAGPipeline:
 
     def answer(self, question: str):
         # 1. Retrieve documents, FAISS retrieval
-        retrieved_chunks = self.retriever.search(question, 20)
+        retrieved_chunks = self.retriever.search(question, 50)
 
         # 2. Cross-encoder re-ranking
         reranked_chunks = self.reranker.rerank(question, retrieved_chunks)
