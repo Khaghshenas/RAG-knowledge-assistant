@@ -1,13 +1,12 @@
-import sys
 import os
+import sys
+from pathlib import Path
 
-# Add Pipeline root to PYTHONPATH
-PIPELINE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../pipeline/"))
-sys.path.insert(0, PIPELINE_PATH)
+from src.inference.rag_pipeline import RAGPipeline
+from src.scripts.utils import load_config, setup_logging
 
-from rag_pipeline import RAGPipeline
-
-rag = RAGPipeline(top_k=5)
+config = load_config()
+rag = RAGPipeline(config)
 
 sample_questions = [
     "What is the official language of Brazil?",

@@ -1,18 +1,23 @@
-import faiss
-import numpy as np
-import pickle
+import logging
 import os
+import pickle
+import sys
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent
+import faiss
+import numpy as np
 
-EMBEDDINGS_PATH = (BASE_DIR / "../data/processed/chunk_embeddings.npz").resolve()
-INDEX_PATH = (BASE_DIR / "../data/processed/faiss.index").resolve()
-METADATA_PATH = (BASE_DIR / "../data/processed/faiss_metadata.pkl").resolve()
+from src.scripts.utils import load_config, setup_logging
+
+# Logging Setup
+setup_logging()
+logger = logging.getLogger(__name__)
 
 
-def load_embeddings():
-    data = np.load(EMBEDDINGS_PATH, allow_pickle=True)
+def load_embeddings(config=None):
+    config = config or load_config()
+    embedding_path = Path(config['paths']['embeddings_path'])
+    data = np.load(embedding_path, allow_pickle=True)
     embeddings = data["embeddings"].astype("float32")
     chunk_ids = data["chunk_ids"]
     texts = data["texts"]
@@ -33,10 +38,14 @@ def build_faiss_index(embeddings):
     return index
 
 
-def save_index(index, chunk_ids, texts, metadata):
-    faiss.write_index(index, str(INDEX_PATH))
+def save_index(index, chunk_ids, texts, metadata, config=None):
 
-    with open(METADATA_PATH, "wb") as f:
+    config = config or load_config()
+    index_path = Path(config['paths']['index_path'])
+    metadata_path = Path(config['paths']['metadata_path'])
+    faiss.write_index(index, str(index_path))
+
+    with open(metadata_path, "wb") as f:
         pickle.dump(
             {
                 "chunk_ids": chunk_ids,
@@ -47,13 +56,16 @@ def save_index(index, chunk_ids, texts, metadata):
         )
 
 
-def load_index():
-    if not os.path.exists(INDEX_PATH):
+def load_index(config=None):
+    config = config or load_config()
+    metadata_path = Path(config['paths']['metadata_path'])
+    index_path = Path(config['paths']['index_path'])
+    if not os.path.exists(index_path):
         raise FileNotFoundError("FAISS index not found. Build it first.")
     
-    index = faiss.read_index(str(INDEX_PATH).replace("\\", "/"))
+    index = faiss.read_index(str(index_path).replace("\\", "/"))
 
-    with open(METADATA_PATH, "rb") as f:
+    with open(metadata_path, "rb") as f:
         data = pickle.load(f)
 
     return (

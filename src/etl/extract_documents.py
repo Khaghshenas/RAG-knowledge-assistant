@@ -1,8 +1,23 @@
 import json
+import logging
+import sys
 from pathlib import Path
+
 from tqdm import tqdm
 
-def extract_contexts(input_file: Path, output_file: Path):
+from src.scripts.utils import load_config, setup_logging
+
+# Logging Setup
+setup_logging()
+logger = logging.getLogger(__name__)
+
+
+def extract_contexts(config=None):
+
+    config = config or load_config()
+    input_file = Path(config['paths']['raw_data_path']) / "train.json"
+    output_file = Path(config['paths']['documents_path'])
+
     seen_contexts = set()
     docs = []
 
@@ -27,18 +42,12 @@ def extract_contexts(input_file: Path, output_file: Path):
                 "title": item["title"]
             })
 
-    # Ensure output directory exists
-    output_file.parent.mkdir(parents=True, exist_ok=True)
-
     # Write to JSON Lines
     with output_file.open("w", encoding="utf-8") as f:
         for doc in docs:
             f.write(json.dumps(doc, ensure_ascii=False) + "\n")
 
-if __name__ == "__main__":
+    return output_file, len(docs)
     
-    BASE_DIR = Path(__file__).resolve().parent
-    input_path = (BASE_DIR / "../data/raw/squad_v2/train.json").resolve()
-    output_path = (BASE_DIR / "../data/processed/documents.jsonl").resolve()
-
-    extract_contexts(input_path, output_path)
+if __name__ == "__main__":
+    extract_contexts()

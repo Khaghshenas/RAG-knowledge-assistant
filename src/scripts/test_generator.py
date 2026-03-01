@@ -1,12 +1,11 @@
-import sys
+import logging
 import os
+import sys
+from pathlib import Path
 
-# Add Generator root to PYTHONPATH
-GENERATOR_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../generator/"))
-sys.path.insert(0, GENERATOR_PATH)
-
-from llm import HFGenerator
-from prompt import build_prompt
+from src.inference.generation.llm import HFGenerator
+from src.inference.generation.prompt import build_prompt
+from src.scripts.utils import load_config, setup_logging
 
 fake_chunks = [
     {"text": "The Super Bowl XLIV was won by the New Orleans Saints."},

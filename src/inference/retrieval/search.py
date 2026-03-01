@@ -1,21 +1,27 @@
-import sys
+import logging
 import os
-
-# Add Retriever root to PYTHONPATH
-RETRIEVER_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../retriever/"))
-sys.path.insert(0, RETRIEVER_PATH)
+import sys
+from pathlib import Path
 
 import faiss
 import numpy as np
 from sentence_transformers import SentenceTransformer
-from index import load_index
 
-MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
+from src.etl.index import load_index
+from src.scripts.utils import load_config, setup_logging
+
+# Logging Setup
+setup_logging()
+logger = logging.getLogger(__name__)
+
 
 class FaissRetriever:
-    def __init__(self, top_k=5):
-        self.top_k = top_k
-        self.model = SentenceTransformer(MODEL_NAME)
+    def __init__(self, config=None):
+        self.config = config or load_config()
+        self.model_name = self.config['models']['retriever']['model_name']
+        self.top_k = self.config['models']['retriever']['top_k_retrieval']
+
+        self.model = SentenceTransformer(self.model_name)
 
         self.index, self.chunk_ids, self.texts, self.metadata = load_index()
 
@@ -24,10 +30,10 @@ class FaissRetriever:
         faiss.normalize_L2(embedding)
         return embedding
 
-    def search(self, query: str, topk):
+    def search(self, query: str, top_k=None):
+        k = top_k or self.top_k
         query_embedding = self.encode_query(query)
-
-        scores, indices = self.index.search(query_embedding, topk)
+        scores, indices = self.index.search(query_embedding, k)
 
         results = []
         for score, idx in zip(scores[0], indices[0]):

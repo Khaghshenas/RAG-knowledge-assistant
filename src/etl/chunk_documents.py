@@ -2,38 +2,50 @@
 # NOTE: Might need to deduplicate chunks if many repeats
 
 import json
-from transformers import AutoTokenizer
-from pathlib import Path
-from tqdm import tqdm
+import logging
 import re
-from clean_text import clean_text
+import sys
+from pathlib import Path
 
-tokenizer = AutoTokenizer.from_pretrained("sentence-transformers/all-MiniLM-L6-v2")
+from tqdm import tqdm
+from transformers import AutoTokenizer
 
-CHUNK_SIZE = 400
-CHUNK_OVERLAP = 80
+from src.etl.clean_text import clean_text
+from src.scripts.utils import load_config
+from src.scripts.utils import setup_logging
 
-def chunk_text(text):
+# Logging Setup
+setup_logging()
+logger = logging.getLogger(__name__)
+
+
+def chunk_text(text, config):
+    tokenizer_name = config['preprocessing']['tokenizer_name']
+    tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
     tokens = tokenizer.encode(text, add_special_tokens=False)
     chunks = []
 
     start = 0
     while start < len(tokens):
-        end = start + CHUNK_SIZE
+        end = start + config['preprocessing']['chunk_size']
         chunk_tokens = tokens[start:end]
         chunk_text = tokenizer.decode(chunk_tokens, skip_special_tokens=True)
         chunks.append(chunk_text)
-        start += CHUNK_SIZE - CHUNK_OVERLAP
+        start += config['preprocessing']['chunk_size'] - config['preprocessing']['chunk_overlap']
 
     return chunks
 
-def process_documents(input_path: Path, output_path: Path):
+def process_documents(config=None):
+    config = config or load_config()
+    input_path = Path(config['paths']['documents_path'])
+    output_path = Path(config['paths']['chunks_path'])
+
     with input_path.open("r", encoding="utf-8") as f, output_path.open("w", encoding="utf-8") as out:
 
         for line in tqdm(f, desc="Processing documents"):
             doc = json.loads(line)
             text = clean_text(doc["text"])
-            chunks = chunk_text(text)
+            chunks = chunk_text(text, config)
 
             safe_title = re.sub(r"\W+", "_", doc["title"])
             for i, chunk in enumerate(chunks):
@@ -45,11 +57,8 @@ def process_documents(input_path: Path, output_path: Path):
                         "source": doc["source"]
                     }
                 }, ensure_ascii=False) + "\n")
+    
+    return output_path 
 
 if __name__ == "__main__":
-    
-    BASE_DIR = Path(__file__).resolve().parent.parent
-    input_path = (BASE_DIR / "../data/processed/documents.jsonl").resolve()
-    output_path = (BASE_DIR / "../data/processed/chunks.jsonl").resolve()
-
-    process_documents(input_path, output_path)
+    process_documents()

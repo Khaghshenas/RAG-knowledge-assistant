@@ -1,4 +1,4 @@
-from generation_metrics import exact_match, f1_score
+from src.evaluation.generation_metrics import exact_match, f1_score
 
 def evaluate_rag(rag_pipeline, eval_set, max_samples=None):
     ems, f1s = [], []

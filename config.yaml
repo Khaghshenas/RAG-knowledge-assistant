@@ -1,0 +1,48 @@
+project:
+  name: "rag-qa-squad-v2"
+  description: "RAG pipeline for SQuAD v2.0 with Re-ranking"
+
+# Data and Persistence Paths
+paths:
+  raw_data_path: "data/raw/squad_v2/"
+  documents_path: "data/processed/documents.jsonl"
+  embeddings_path: "data/processed/chunk_embeddings.npz"
+  index_path: "data/processed/faiss.index"
+  metadata_path: "data/processed/faiss_metadata.pkl"
+  chunks_path: "data/processed/chunks.jsonl"
+
+# Preprocessing 
+preprocessing:
+  chunk_size: 400      
+  chunk_overlap: 80
+  tokenizer_name: "sentence-transformers/all-MiniLM-L6-v2"
+  clean_text: true
+
+# Model Configurations
+models:
+  # 1. Embedding Model (used by Retriever)
+  retriever:
+    model_name: "sentence-transformers/all-MiniLM-L6-v2"
+    dimension: 384
+    top_k_retrieval: 50 
+    top_k_final: 5
+    batch_size: 64
+
+  # 2. Re-ranker (Cross-Encoder)
+  reranker:
+    model_name: "cross-encoder/ms-marco-MiniLM-L-12-v2"
+    enabled: true
+    max_length: 512
+
+  # 3. Generator (LLM)
+  generator:
+    model_name: "google/flan-t5-base" # Or "t5-small" for testing
+    device: "cuda" # Options: "cuda", "cpu", "mps"
+    max_new_tokens: 150
+    temperature: 0.7
+    do_sample: true
+    repetition_penalty: 1.2
+    truncation: True
+    max_length: 1024
+    skip_special_tokens: True
+    return_tensors: "pt"

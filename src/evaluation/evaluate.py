@@ -1,13 +1,9 @@
 import sys
 import os
 
-# Add Pipeline root to PYTHONPATH
-PIPELINE_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../pipeline/"))
-sys.path.insert(0, PIPELINE_PATH)
-
-from rag_pipeline import RAGPipeline
-from retrieval_metrics import recall_at_k
-from rag_metrics import evaluate_rag
+from src.inference.rag_pipeline import RAGPipeline
+from src.evaluation.retrieval_metrics import recall_at_k
+from src.evaluation.rag_metrics import evaluate_rag
 
 def run_evaluation(eval_set):
     rag = RAGPipeline(top_k=5)
