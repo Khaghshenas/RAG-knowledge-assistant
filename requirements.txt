@@ -4,3 +4,5 @@ transformers
 sentence-transformers
 torch
 faiss-cpu
+fastapi 
+uvicorn
