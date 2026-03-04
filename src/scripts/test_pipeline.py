@@ -28,7 +28,6 @@ for q in sample_questions:
 
 # Display predictions
 for p in predictions:
-    print("Q:", p["question"])
-    print("A:", p["answer"])
-    #print("Sources:", p["sources"])
-    print("-" * 50)
+    logger.info("Q: %s", p["question"])
+    logger.info("A: %s", p["answer"])
+    logger.info("%s", "-" * 50)

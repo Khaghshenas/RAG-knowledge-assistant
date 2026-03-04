@@ -19,4 +19,4 @@ prompt = build_prompt(question, fake_chunks)
 generator = HFGenerator()
 answer = generator.generate(prompt)
 
-print("Answer:", answer)
+logger.info("Answer: %s", answer)

@@ -30,7 +30,7 @@ class HFGenerator:
         self.return_tensors = self.config['models']['generator']['return_tensors']
 
         self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
-        print(f"Loading LLM: {self.model_name} on {self.device}")
+        logger.info("Loading LLM: %s on %s", self.model_name, self.device)
 
         self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
         self.model = AutoModelForSeq2SeqLM.from_pretrained(self.model_name)

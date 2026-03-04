@@ -11,6 +11,6 @@ def run_evaluation(eval_set):
     recall = recall_at_k(eval_set, rag.retriever, rag.reranker, k=5)
     rag_scores = evaluate_rag(rag, eval_set, max_samples=100)
 
-    print("Recall@5:", recall)
-    print("RAG EM:", rag_scores["EM"])
-    print("RAG F1:", rag_scores["F1"])
+    logger.info("Recall@5: %s", recall)
+    logger.info("RAG EM: %s", rag_scores["EM"])
+    logger.info("RAG F1: %s", rag_scores["F1"])

@@ -23,7 +23,7 @@ def download_squad(config=None):
     for split in dataset:
         path = output_path / f"{split}.json"
         dataset[split].to_json(path)
-        print(f"Saved {split} to {path}")
+        logger.info("Saved %s to %s", split, path)
     
     return output_path   
 

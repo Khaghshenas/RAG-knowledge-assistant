@@ -78,10 +78,10 @@ def load_index(config=None):
 
 if __name__ == "__main__":
     
-    print("Building FAISS index...")
+    logger.info("Building FAISS index...")
 
     embeddings, chunk_ids, texts, metadata = load_embeddings()
     index = build_faiss_index(embeddings)
     save_index(index, chunk_ids, texts, metadata)
 
-    print(f"Index built with {index.ntotal} vectors")
+    logger.info("Index built with %d vectors", index.ntotal)
