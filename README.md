@@ -1,4 +1,4 @@
-# Retrieval-Augmented Generation for Question Answering (SQuAD_V2)
+# Retrieval-Augmented Generation (RAG) System for Question Answering
 
 This repository implements a **Retrieval-Augmented Generation (RAG) QA system** built on **SQuAD v2** dataset, combining **FAISS-based retrieval** with a pre-trained model, **Hugging Face LLM (FLAN-T5)**, for answer generation.
 
