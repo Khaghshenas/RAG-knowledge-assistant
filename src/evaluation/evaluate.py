@@ -1,9 +1,14 @@
-import sys
-import os
+import logging
 
 from src.inference.rag_pipeline import RAGPipeline
 from src.evaluation.retrieval_metrics import recall_at_k
 from src.evaluation.rag_metrics import evaluate_rag
+from src.scripts.utils import setup_logging
+
+# Logging Setup
+setup_logging()
+logger = logging.getLogger(__name__)
+
 
 def run_evaluation(eval_set):
     rag = RAGPipeline(top_k=5)

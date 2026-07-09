@@ -119,14 +119,18 @@ rag-qa-squad_v2/
 │           └── llm.py
 │       └── rag_pipeline.py              
 │   └── scripts/
-│       ├── utils.py
-│       ├── test_generator.py
-│       └── test_pipeline.py             
+│       ├── run_rag_pipeline.py
+│       ├── run_generator.py
+│       └── utils.py
+│            
 │   └── evaluation/
 │       ├── retrieval_metrics.py
 │       ├── generation_metrics.py
 │       ├── rag_metrics.py
 │       └── evaluate.py  
+├── tests/
+│   ├── test_generator.py
+│   └── test_pipeline.py  
 ├── notebooks/  
 ├── .gitignore
 ├── .dockerignore
@@ -175,14 +179,14 @@ python -m src.etl.etl_pipeline
 ```
 **3. Inference Pipeline**
 
-You can use ```test_pipeline``` to run a full RAG workflow on sample data. This executes retrieval and generation steps, and verifies that the pipeline works correctly.
+You can use ```run_rag_pipeline``` to run a full RAG workflow on sample data. This executes retrieval and generation steps, and verifies that the pipeline works correctly.
 ```bash
-python -m src.scripts.test_pipeline
+python -m src.scripts.run_rag_pipeline
 ```
 
-You can also use ```test_generation``` to run only the LLM-based answer generation on pre-retrieved context. This is useful for validating the model’s output without performing retrieval.
+You can also use ```run_generator``` to run only the LLM-based answer generation on pre-retrieved context. This is useful for validating the model’s output without performing retrieval.
 ```bash
-python -m src.scripts.test_generator
+python -m src.scripts.run_generator
 ```
 
 ---
