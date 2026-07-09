@@ -1,3 +1,4 @@
+![CI](https://github.com/Khaghshenas/RAG-knowledge-assistant/actions/workflows/ci.yml/badge.svg)
 # Retrieval-Augmented Generation (RAG) System for Question Answering
 
 This repository implements a **Retrieval-Augmented Generation (RAG) QA system** built on **SQuAD v2** dataset, combining **FAISS-based retrieval** with a pre-trained model, **Hugging Face LLM (FLAN-T5)**, for answer generation.
