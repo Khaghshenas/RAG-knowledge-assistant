@@ -2,9 +2,7 @@
 # NOTE: Might need to deduplicate chunks if many repeats
 
 import json
-import logging
 import re
-import sys
 from pathlib import Path
 
 from tqdm import tqdm
@@ -12,11 +10,7 @@ from transformers import AutoTokenizer
 
 from src.etl.clean_text import clean_text
 from src.scripts.utils import load_config
-from src.scripts.utils import setup_logging
 
-# Logging Setup
-setup_logging()
-logger = logging.getLogger(__name__)
 
 
 def chunk_text(text, config):

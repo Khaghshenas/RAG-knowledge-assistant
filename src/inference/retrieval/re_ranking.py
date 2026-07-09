@@ -1,15 +1,8 @@
-import logging
-import sys
-from pathlib import Path
-
 import torch
 from sentence_transformers import CrossEncoder
 
-from src.scripts.utils import load_config, setup_logging
+from src.scripts.utils import load_config
 
-# Logging Setup
-setup_logging()
-logger = logging.getLogger(__name__)
 
 class CrossEncoderReranker:
     def __init__(self, config=None, device=None):

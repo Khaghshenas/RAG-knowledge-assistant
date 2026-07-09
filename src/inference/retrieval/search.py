@@ -1,19 +1,8 @@
-import logging
-import os
-import sys
-from pathlib import Path
-
 import faiss
-import numpy as np
 from sentence_transformers import SentenceTransformer
 
 from src.etl.index import load_index
-from src.scripts.utils import load_config, setup_logging
-
-# Logging Setup
-setup_logging()
-logger = logging.getLogger(__name__)
-
+from src.scripts.utils import load_config
 
 class FaissRetriever:
     def __init__(self, config=None):

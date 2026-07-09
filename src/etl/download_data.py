@@ -1,11 +1,9 @@
 import logging
-import sys
 from pathlib import Path
 
 from datasets import load_dataset
 
-from src.scripts.utils import load_config
-from src.scripts.utils import setup_logging
+from src.scripts.utils import load_config, setup_logging
 
 # Logging Setup
 setup_logging()

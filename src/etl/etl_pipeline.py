@@ -1,9 +1,7 @@
 import logging
-import yaml
 import sys
 import time
 import argparse
-from pathlib import Path
 
 from src.etl.download_data import download_squad
 from src.etl.extract_documents import extract_contexts
@@ -12,13 +10,14 @@ from src.etl.embeddings import generate_embeddings
 from src.etl.index import build_faiss_index
 from src.scripts.utils import setup_logging, load_config
 
-
+# Logging Setup
+setup_logging()
+logger = logging.getLogger(__name__)
 
 def run_pipeline(config_path: str) -> None:
     
     config = load_config(config_path)
-    setup_logging()
-    logger = logging.getLogger(__name__)
+
     
     logger.info("--- Starting Offline ETL Pipeline ---")
     start_time = time.time()

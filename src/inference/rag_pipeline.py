@@ -1,17 +1,9 @@
-import logging
-import os
-import sys
-from pathlib import Path
-
 from src.inference.generation.llm import HFGenerator
 from src.inference.generation.prompt import build_prompt
 from src.inference.retrieval.re_ranking import CrossEncoderReranker
 from src.inference.retrieval.search import FaissRetriever
-from src.scripts.utils import load_config, setup_logging
+from src.scripts.utils import load_config
 
-# Logging Setup
-setup_logging()
-logger = logging.getLogger(__name__)
 
 class RAGPipeline:
     def __init__(

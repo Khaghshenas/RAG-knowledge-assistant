@@ -1,7 +1,6 @@
 import json
 import logging
-import os
-import sys
+
 from pathlib import Path
 
 import numpy as np
@@ -9,6 +8,10 @@ from sentence_transformers import SentenceTransformer
 from tqdm import tqdm
 
 from src.scripts.utils import load_config, setup_logging
+
+# Logging Setup
+setup_logging()
+logger = logging.getLogger(__name__)
 
 
 def generate_embeddings(config=None):

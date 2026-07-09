@@ -1,15 +1,9 @@
 import json
-import logging
-import sys
 from pathlib import Path
 
 from tqdm import tqdm
 
-from src.scripts.utils import load_config, setup_logging
-
-# Logging Setup
-setup_logging()
-logger = logging.getLogger(__name__)
+from src.scripts.utils import load_config
 
 
 def extract_contexts(config=None):
