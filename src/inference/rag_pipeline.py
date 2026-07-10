@@ -19,8 +19,8 @@ class RAGPipeline:
         self.reranker = reranker or CrossEncoderReranker(config)
         self.generator = generator or HFGenerator(config)
         
-        self.initial_k = config['models']['retriever']['top_k_retrieval']
-        self.final_k = config['models']['retriever']['top_k_final']
+        self.initial_k = self.config['models']['retriever']['top_k_retrieval']
+        self.final_k = self.config['models']['retriever']['top_k_final']
         
 
     def answer(self, question: str):

@@ -209,14 +209,14 @@ This metric provides a hard upper bound on the achievable end-to-end RAG perform
 | --------------------- | ------------------ | --------- | ----------------------------------------------------- |
 | Recall@5 (Oracle)     | Train → Train      | **0.91**  | Upper bound; answer exists in corpus                  |
 | Recall@10 (Oracle)    | Train → Train      | **0.92**  | Increasing top-K improves coverage                    |
-| Recall@5 (Realistic)  | Train → Validation | **0.19**  | Many validation answers missing from train corpus     |
+| Recall@5 (Realistic)  | Train → Validation | **0.12**  | Many validation answers missing from train corpus     |
 | Recall@10 (Realistic) | Train → Validation | **0.232** | Higher K helps slightly                               |
 | Answer existence rate | Train → Validation | **0.54**  | Upper bound for Recall@∞ (corpus coverage)            |
 | Recall@10 efficiency  | Train → Validation | **0.43**  | Fraction of available answers retrieved within top-10 |
 
 **Interpretations**
 - When the answer is present in the corpus (Oracle retrieval), the retriever performs very well (Recall@5 = 0.91).
-- On realistic questions (Train → Validation), recall drops because many answers are not in the corpus (Recall@5 = 0.19).
+- On realistic questions (Train → Validation), recall drops because many answers are not in the corpus (Recall@5 = 0.12).
 - Only about 54% of validation answers exist in the training corpus, so this is the upper limit for retrieval performance.
 - Retrieving the top 10 chunks improves coverage, but still only ~43% of available answers are retrieved efficiently.
 - In short: the retriever works well when the answer is in the corpus, but end-to-end performance is limited by missing information.
