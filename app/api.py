@@ -1,17 +1,14 @@
-import sys
 import logging
-import yaml
-import uvicorn
-from pathlib import Path
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
-from src.inference.rag_pipeline import RAGPipeline
-from src.scripts.utils import setup_logging, load_config
+from app.config import get_pipeline_manager
+from src.scripts.utils import setup_logging
 
 # Setup
 setup_logging()
 logger = logging.getLogger("api")
+
 app = FastAPI(
     title="RAG QA API",
     description="Retrieval-Augmented Generation Question Answering Service",
@@ -28,29 +25,25 @@ class QueryResponse(BaseModel):
     contexts: list
     metadata: dict
 
-rag_pipeline: RAGPipeline = None
 
 @app.on_event("startup")
 def startup_event():
-    """Load configurations and initialize the inference pipeline once when the server starts."""
-    global rag_pipeline
-
-    logger.info("Loading configuration...")
-    config = load_config()
-
-    logger.info("Initializing RAG pipeline...")
-    rag_pipeline = RAGPipeline(config=config)
-
-    logger.info("RAG pipeline ready.")
+    """Initialize the RAG pipeline once when the server starts."""
+    logger.info("FastAPI startup event triggered")
+    manager = get_pipeline_manager()
+    manager.initialize()
+    logger.info("RAG pipeline is ready for requests")
 
 
 @app.post("/query", response_model=QueryResponse)
 def query(request: QueryRequest):
+    """Process a query using the shared RAG pipeline."""
     try:
         logger.info("Received query: %s", request.question)
-
-        result = rag_pipeline.answer(request.question)
-
+        
+        manager = get_pipeline_manager()
+        result = manager.pipeline.answer(request.question)
+        
         return result
 
     except Exception as e:
@@ -60,10 +53,16 @@ def query(request: QueryRequest):
 
 @app.get("/health")
 def health():
-    return {"status": "ok"}
+    """Health check endpoint."""
+    manager = get_pipeline_manager()
+    return {
+        "status": "ok",
+        "pipeline_ready": manager.is_ready()
+    }
 
 
 if __name__ == "__main__":
+    import uvicorn
     uvicorn.run(
         "app.api:app",
         host="0.0.0.0",
