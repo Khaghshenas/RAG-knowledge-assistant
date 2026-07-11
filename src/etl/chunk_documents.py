@@ -13,9 +13,8 @@ from src.scripts.utils import load_config
 
 
 
-def chunk_text(text, config):
-    tokenizer_name = config['preprocessing']['tokenizer_name']
-    tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
+def chunk_text(text, config, tokenizer):
+    
     tokens = tokenizer.encode(text, add_special_tokens=False)
     chunks = []
 
@@ -35,11 +34,13 @@ def process_documents(config=None):
     output_path = Path(config['paths']['chunks_path'])
 
     with input_path.open("r", encoding="utf-8") as f, output_path.open("w", encoding="utf-8") as out:
-
+        
+        tokenizer_name = config['preprocessing']['tokenizer_name']
+        tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
         for line in tqdm(f, desc="Processing documents"):
             doc = json.loads(line)
             text = clean_text(doc["text"])
-            chunks = chunk_text(text, config)
+            chunks = chunk_text(text, config, tokenizer)
 
             safe_title = re.sub(r"\W+", "_", doc["title"])
             for i, chunk in enumerate(chunks):
